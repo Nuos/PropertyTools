@@ -19,18 +19,25 @@ namespace ControlDemos
     /// </summary>
     public partial class EditableTextBlockAndPropertyGridPage
     {
+        private ViewModel vm;
+
         public EditableTextBlockAndPropertyGridPage()
         {
             this.InitializeComponent();
-            this.DataContext = new ViewModel();
+            this.vm = new ViewModel(this);
+            this.DataContext = this.vm;
         }
 
         public class ViewModel : Observable
         {
+
+            private readonly EditableTextBlockAndPropertyGridPage page;
+
             private string name;
 
-            public ViewModel()
+            public ViewModel(EditableTextBlockAndPropertyGridPage page)
             {
+                this.page = page;
                 this.Name = "Model1";
             }
 
@@ -43,7 +50,9 @@ namespace ControlDemos
 
                 set
                 {
+                    this.page.DataContext = null;
                     this.SetValue(ref this.name, value, nameof(this.Name));
+                    this.page.DataContext = this.page.vm;
                 }
             }
         }
